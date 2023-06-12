@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+ePOS-Print Service (Display)
+
+Version 6.0.0
+
+Copyright (C) SEIKO EPSON CORPORATION 2016. All rights reserved.
+
+-->
+
+<definitions name="ePOSDisplay" targetNamespace="http://www.epson-pos.com/schemas/2012/09/epos-display" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:epos="http://www.epson-pos.com/schemas/2012/09/epos-display" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <!-- Types -->
+  <types>
+    <xs:schema targetNamespace="http://www.epson-pos.com/schemas/2012/09/epos-display">
+      <xs:include schemaLocation="epos-display-6.0.0.xsd"/>
+    </xs:schema>
+  </types>
+
+  <!-- Messages -->
+  <message name="ePOSDisplayRequest">
+    <part name="header" element="epos:parameter"/>
+    <part name="body" element="epos:epos-display"/>
+  </message>
+  <message name="ePOSDisplayResponse">
+    <part name="header" element="epos:parameter"/>
+    <part name="body" element="epos:response"/>
+  </message>
+
+  <!-- Port Type -->
+  <portType name="ePOSDisplayPortType">
+    <operation name="send">
+      <input message="epos:ePOSDisplayRequest"/>
+      <output message="epos:ePOSDisplayResponse"/>
+    </operation>
+  </portType>
+
+  <!-- Binding -->
+  <binding name="ePOSDisplayBinding" type="epos:ePOSDisplayPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="send">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:header part="header" message="epos:ePOSDisplayRequest" use="literal"/>
+        <soap:body parts="body" use="literal"/>
+      </input>
+      <output>
+        <soap:header part="header" message="epos:ePOSDisplayResponse" use="literal"/>
+        <soap:body parts="body" use="literal"/>
+      </output>
+    </operation>
+  </binding>
+
+  <!-- Service -->
+  <service name="ePOSDisplayService">
+    <port binding="epos:ePOSDisplayBinding" name="ePOSDisplayPort">
+      <soap:address location="http://192.168.192.168/cgi-bin/eposDisp/service.cgi"/>
+    </port>
+  </service>
+</definitions>

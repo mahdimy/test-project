@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+ePOS-Display XML
+
+Version 6.0.0
+
+Copyright (C) SEIKO EPSON CORPORATION 2016. All rights reserved.
+
+-->
+
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" 
+  targetNamespace="http://www.epson-pos.com/schemas/2012/09/epos-display"
+  xmlns:tns="http://www.epson-pos.com/schemas/2012/09/epos-display"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <!-- Reset -->
+  <xs:complexType name="reset" />
+
+  <!-- Window -->
+  <xs:complexType name="window">
+    <xs:attribute name="number" type="tns:number-type" use="required"/>
+    <xs:attribute name="x" type="tns:cursor-x-type"/>
+    <xs:attribute name="y" type="tns:cursor-y-type"/>
+    <xs:attribute name="scrollmode" type="tns:scrollmode-type" default="overwrite"/>
+    <xs:attribute name="width" type="tns:width-type"/>
+    <xs:attribute name="height" type="tns:height-type" />
+    <xs:attribute name="destroy" type="xs:boolean" />
+  </xs:complexType>
+  
+  <!-- Screen -->
+  <xs:complexType name="screen">
+    <xs:attribute name="mode" type="tns:screenmode-type"/>
+    <xs:attribute name="column" type="tns:width-type"/>
+    <xs:attribute name="row" type="tns:height-type"/>
+  </xs:complexType>
+
+  <xs:simpleType name="screenmode1-type">
+    <xs:restriction base="xs:positiveInteger">
+      <xs:maxInclusive value="15" />
+      <xs:minInclusive value="1" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="screenmode2-type">
+    <xs:restriction base="xs:positiveInteger">
+      <xs:maxInclusive value="31" />
+      <xs:minInclusive value="20" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Screenmode Type-->
+  <xs:simpleType name="screenmode-type">
+    <xs:union memberTypes="tns:screenmode1-type tns:screenmode2-type" />
+  </xs:simpleType>
+
+  <!-- Slideshow -->
+  <xs:complexType name="slideshow">
+    <xs:attribute name="interval" type="tns:slideshowinterval-type"/>
+    <xs:attribute name="stop" type="xs:boolean" default="false"/>
+  </xs:complexType>
+
+  <xs:simpleType name="slideshowinterval-type">
+    <xs:restriction base="xs:positiveInteger">
+      <xs:maxInclusive value="51000" />
+      <xs:minInclusive value="200" />
+    </xs:restriction>
+  </xs:simpleType>
+  
+  <!-- Textarea -->
+  <xs:complexType name="textarea">
+    <xs:attribute name="number" type="tns:number-type" use="required"/>
+    <xs:attribute name="x" type="tns:cursor-x-type"/>
+    <xs:attribute name="y" type="tns:cursor-y-type"/>
+    <xs:attribute name="scrollmode" type="tns:scrollmode-type" default="overwrite"/>
+    <xs:attribute name="width" type="tns:width-type"/>
+    <xs:attribute name="height" type="tns:height-type" />
+    <xs:attribute name="destroy" type="xs:boolean" />
+  </xs:complexType>
+  
+  <!-- Print 2-D Symbol -->
+  <xs:complexType name="symbol">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="type" type="tns:symbol-type" use="required" />
+        <xs:attribute name="level" type="tns:symbol-level" />
+        <xs:attribute name="width" type="xs:unsignedByte" />
+        <xs:attribute name="dotx" type="tns:dot-x-type" />
+        <xs:attribute name="doty" type="tns:dot-y-type" />
+        <xs:attribute name="quietzone" type="xs:boolean" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <!-- 2-D Symbol Type -->
+  <xs:simpleType name="symbol-type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="qrcode_model_1" />
+      <xs:enumeration value="qrcode_model_2" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- 2-D Symbol Error Correction Level -->
+  <xs:simpleType name="symbol-level">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="level_l" />
+      <xs:enumeration value="level_m" />
+      <xs:enumeration value="level_q" />
+      <xs:enumeration value="level_h" />
+      <xs:enumeration value="default" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="dot-x-type">
+    <xs:restriction base="xs:unsignedShort">
+      <xs:maxInclusive value="799" />
+      <xs:minInclusive value="0" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="dot-y-type">
+    <xs:restriction base="xs:unsignedShort">
+      <xs:maxInclusive value="799" />
+      <xs:minInclusive value="0" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="dot-width-type">
+    <xs:restriction base="xs:unsignedShort">
+      <xs:maxInclusive value="1440" />
+      <xs:minInclusive value="0" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="dot-height-type">
+    <xs:restriction base="xs:unsignedShort">
+      <xs:maxInclusive value="1440" />
+      <xs:minInclusive value="0" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Clearsymbol -->
+  <xs:complexType name="clearsymbol">
+  </xs:complexType>
+
+  <!-- Registerdownloadimage -->
+  <xs:complexType name="registerdownloadimage">
+    <xs:simpleContent>
+      <xs:extension base="xs:base64Binary">
+        <xs:attribute name="key1" type="xs:unsignedByte" use="required" />
+        <xs:attribute name="key2" type="xs:unsignedByte" use="required" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <!-- Downloadimage -->
+  <xs:complexType name="downloadimage">
+    <xs:attribute name="key1" type="xs:unsignedByte" use="required" />
+    <xs:attribute name="key2" type="xs:unsignedByte" use="required" />
+    <xs:attribute name="dotx" type="tns:dot-x-type" />
+    <xs:attribute name="doty" type="tns:dot-y-type" />
+    <xs:attribute name="width" type="tns:dot-width-type" />
+    <xs:attribute name="height" type="tns:dot-height-type" />
+  </xs:complexType>
+
+  <!-- NVimage -->
+  <xs:complexType name="nvimage">
+    <xs:attribute name="key1" type="xs:unsignedByte" use="required" />
+    <xs:attribute name="key2" type="xs:unsignedByte" use="required" />
+    <xs:attribute name="dotx" type="tns:dot-x-type" />
+    <xs:attribute name="doty" type="tns:dot-y-type" />
+    <xs:attribute name="width" type="tns:dot-width-type" />
+    <xs:attribute name="height" type="tns:dot-height-type" />
+  </xs:complexType>
+
+  <!-- Clearimage -->
+  <xs:complexType name="clearimage">
+  </xs:complexType>
+
+  <!-- Backgroundcolor -->
+  <xs:complexType name="backgroundcolor">
+    <xs:attribute name="color" type="tns:color-type" use="required" />
+    <xs:attribute name="row" type="tns:backgroundcolor-row-type" use="required" />
+  </xs:complexType>
+
+  <xs:simpleType name="backgroundcolor-row1-type">
+    <xs:restriction base="xs:unsignedByte">
+      <xs:maxInclusive value="19" />
+      <xs:minInclusive value="1" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="backgroundcolor-row2-type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="all" />
+      <xs:enumeration value="odd" />
+      <xs:enumeration value="even" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- BackgroundColorRow Type-->
+  <xs:simpleType name="backgroundcolor-row-type">
+    <xs:union memberTypes="tns:backgroundcolor-row1-type tns:backgroundcolor-row2-type" />
+  </xs:simpleType>
+
+  <!-- Cursor -->
+  <xs:complexType name="cursor">
+    <xs:attribute name="type" type="tns:cursor-type-type"/>
+    <xs:attribute name="x" type="tns:cursor-x-type"/>
+    <xs:attribute name="y" type="tns:cursor-y-type"/>
+    <xs:attribute name="moveto" type="tns:moveto-type"/>
+  </xs:complexType>
+
+  <!-- Moveto Type-->
+  <xs:simpleType name="moveto-type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="top_left" />
+      <xs:enumeration value="top_right" />
+      <xs:enumeration value="bottom_left" />
+      <xs:enumeration value="bottom_right" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Cursor Type-->
+  <xs:simpleType name="cursor-type-type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="none" />
+      <xs:enumeration value="underline" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Command -->
+  <xs:complexType name="command">
+    <xs:simpleContent>
+      <xs:extension base="xs:hexBinary" />
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <!-- Scrollmode Type-->
+  <xs:simpleType name="scrollmode-type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="overwrite" />
+      <xs:enumeration value="v_scroll" />
+      <xs:enumeration value="h_scroll" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Width Type -->
+  <xs:simpleType name="width-type">
+    <xs:restriction base="xs:positiveInteger">
+      <xs:maxInclusive value="44" />
+      <xs:minInclusive value="1" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Height Type -->
+  <xs:simpleType name="height-type">
+    <xs:restriction base="xs:positiveInteger">
+      <xs:maxInclusive value="19" />
+      <xs:minInclusive value="1" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Number Type -->
+  <xs:simpleType name="number-type">
+    <xs:restriction base="xs:positiveInteger">
+      <xs:maxInclusive value="4" />
+      <xs:minInclusive value="1" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Text Type-->
+  <xs:simpleType name="text-type">
+    <xs:restriction base="xs:string">
+	<xs:minLength value="1" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Display Text -->
+  <xs:complexType name="text">
+    <xs:simpleContent>
+      <xs:extension base="tns:text-type">
+        <xs:attribute name="lang" type="xs:language" />
+        <xs:attribute name="reverse" type="xs:boolean" default="false"/>
+        <xs:attribute name="x" type="tns:cursor-x-type" />
+        <xs:attribute name="y" type="tns:cursor-y-type" />
+        <xs:attribute name="color" type="tns:color-type" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  
+  <!-- Color Type-->
+  <xs:simpleType name="color-type">
+    <xs:restriction base="xs:token">
+	<xs:pattern value="#[\dA-Fa-f]{6}" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Cursor-x Type -->
+  <xs:simpleType name="cursor-x-type">
+    <xs:restriction base="xs:positiveInteger">
+      <xs:maxInclusive value="44" />
+      <xs:minInclusive value="1" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Cursor-y Type -->
+  <xs:simpleType name="cursor-y-type">
+    <xs:restriction base="xs:positiveInteger">
+      <xs:maxInclusive value="19" />
+      <xs:minInclusive value="1" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Blink -->
+  <xs:complexType name="blink">
+    <xs:attribute name="interval" type="tns:interval-type" use="required" />
+  </xs:complexType>
+
+  <!-- Interval Type -->
+  <xs:simpleType name="interval-type">
+    <xs:restriction base="xs:nonNegativeInteger">
+      <xs:maxInclusive value="12750" />
+      <xs:minInclusive value="0" />
+    </xs:restriction>
+  </xs:simpleType>
+
+
+  <!-- Marquee Type-->
+  <xs:simpleType name="marquee-type">
+    <xs:restriction base="xs:string">
+        <xs:maxLength value="1000" />
+	<xs:minLength value="1" />
+    </xs:restriction>
+  </xs:simpleType>
+  
+  <!-- Marquee -->
+  <xs:complexType name="marquee">
+    <xs:simpleContent>
+      <xs:extension base="tns:marquee-type">
+        <xs:attribute name="lang" type="xs:language" />
+        <xs:attribute name="format" type="tns:format-type"/>
+        <xs:attribute name="repeat" type="tns:repeat-type"/>
+        <xs:attribute name="uwait" type="tns:uwait-type" use="required" />
+        <xs:attribute name="rwait" type="tns:rwait-type" use="required" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <!-- Format Type-->
+  <xs:simpleType name="format-type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="walk" />
+      <xs:enumeration value="place" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Uwait Type -->
+  <xs:simpleType name="uwait-type">
+    <xs:restriction base="xs:nonNegativeInteger">
+      <xs:maxInclusive value="2000" />
+      <xs:minInclusive value="0" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Rwait Type -->
+  <xs:simpleType name="rwait-type">
+    <xs:restriction base="xs:positiveInteger">
+      <xs:maxInclusive value="2000" />
+      <xs:minInclusive value="100" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Rwait Type -->
+  <xs:simpleType name="repeat-type">
+    <xs:restriction base="xs:nonNegativeInteger">
+      <xs:maxInclusive value="127" />
+      <xs:minInclusive value="0" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Brightness -->
+  <xs:complexType name="brightness">
+    <xs:attribute name="value" type="tns:brightness-value-type" use="required" />
+  </xs:complexType>
+
+  <!-- Brightness value Type-->
+  <xs:simpleType name="brightness-value-type">
+    <xs:restriction base="xs:positiveInteger">
+      <xs:enumeration value="20" />
+      <xs:enumeration value="40" />
+      <xs:enumeration value="60" />
+      <xs:enumeration value="100" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Clock Hour Type -->
+  <xs:simpleType name="clock-hour-type">
+    <xs:restriction base="xs:nonNegativeInteger">
+      <xs:maxInclusive value="23" />
+      <xs:minInclusive value="0" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Clock Minute Type -->
+  <xs:simpleType name="clock-minute-type">
+    <xs:restriction base="xs:nonNegativeInteger">
+      <xs:maxInclusive value="59" />
+      <xs:minInclusive value="0" />
+    </xs:restriction>
+  </xs:simpleType>
+  
+  <!-- Clock -->
+  <xs:complexType name="clock">
+    <xs:attribute name="hour" type="tns:clock-hour-type"/>
+    <xs:attribute name="minute" type="tns:clock-minute-type"/>
+  </xs:complexType>
+
+  <!-- Clear -->
+  <xs:complexType name="clear">
+  </xs:complexType>
+
+  <!-- ePOS-Display Request -->
+  <xs:complexType name="epos-display">
+    <xs:choice maxOccurs="unbounded" minOccurs="0">
+      <xs:element name="reset" type="tns:reset" />
+      <xs:element name="window" type="tns:window" />
+      <xs:element name="marquee" type="tns:marquee" />
+      <xs:element name="cursor" type="tns:cursor" />
+      <xs:element name="text" type="tns:text" />
+      <xs:element name="clear" type="tns:clear" />
+      <xs:element name="blink" type="tns:blink" />
+      <xs:element name="brightness" type="tns:brightness" />
+      <xs:element name="command" type="tns:command" />
+      <xs:element name="clock" type="tns:clock" />
+      <xs:element name="screen" type="tns:screen" />
+      <xs:element name="slideshow" type="tns:slideshow" />
+      <xs:element name="textarea" type="tns:textarea" />
+      <xs:element name="symbol" type="tns:symbol" />
+      <xs:element name="clearsymbol" type="tns:clearsymbol" />
+      <xs:element name="registerdownloadimage" type="tns:registerdownloadimage" />
+      <xs:element name="downloadimage" type="tns:downloadimage" />
+      <xs:element name="nvimage" type="tns:nvimage" />
+      <xs:element name="clearimage" type="tns:clearimage" />
+      <xs:element name="backgroundcolor" type="tns:backgroundcolor" />
+    </xs:choice>
+  </xs:complexType>
+  <xs:element name="epos-display" type="tns:epos-display" />
+
+  <!-- ePOS-Display Response -->
+  <xs:complexType name="response">
+    <xs:attribute name="success" type="xs:boolean" />
+    <xs:attribute name="code" type="xs:string" />
+    <xs:attribute name="status" type="xs:unsignedInt" />
+  </xs:complexType>
+  <xs:element name="response" type="tns:response" />
+
+</xs:schema>

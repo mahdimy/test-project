@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+ePOS-Print Service (Printer)
+
+Version 6.0.0
+
+Copyright (C) SEIKO EPSON CORPORATION 2016. All rights reserved.
+
+-->
+
+<definitions name="ePOSPrint" targetNamespace="http://www.epson-pos.com/schemas/2011/03/epos-print" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:epos="http://www.epson-pos.com/schemas/2011/03/epos-print" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <!-- Types -->
+  <types>
+    <xs:schema targetNamespace="http://www.epson-pos.com/schemas/2011/03/epos-print">
+      <xs:include schemaLocation="epos-print-6.0.0.xsd"/>
+    </xs:schema>
+  </types>
+
+  <!-- Messages -->
+  <message name="ePOSPrintRequest">
+    <part name="header" element="epos:parameter"/>
+    <part name="body" element="epos:epos-print"/>
+  </message>
+  <message name="ePOSPrintResponse">
+    <part name="header" element="epos:parameter"/>
+    <part name="body" element="epos:response"/>
+  </message>
+
+  <!-- Port Type -->
+  <portType name="ePOSPrintPortType">
+    <operation name="send">
+      <input message="epos:ePOSPrintRequest"/>
+      <output message="epos:ePOSPrintResponse"/>
+    </operation>
+  </portType>
+
+  <!-- Binding -->
+  <binding name="ePOSPrintBinding" type="epos:ePOSPrintPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="send">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:header part="header" message="epos:ePOSPrintRequest" use="literal"/>
+        <soap:body parts="body" use="literal"/>
+      </input>
+      <output>
+        <soap:header part="header" message="epos:ePOSPrintResponse" use="literal"/>
+        <soap:body parts="body" use="literal"/>
+      </output>
+    </operation>
+  </binding>
+
+  <!-- Service -->
+  <service name="ePOSPrintService">
+    <port binding="epos:ePOSPrintBinding" name="ePOSPrintPort">
+      <soap:address location="http://192.168.192.168/cgi-bin/epos/service.cgi"/>
+    </port>
+  </service>
+</definitions>
